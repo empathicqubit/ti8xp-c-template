@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "default",
+            "includePath": ["/snap/z88dk/current/share/z88dk/include"],
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/snap/bin/z88dk.zcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}
