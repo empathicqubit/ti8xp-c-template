@@ -1,6 +1,23 @@
 {
     "files.associations": {
         "error.h": "c",
-        "conio.h": "c"
+        "conio.h": "c",
+        "*.tcc": "c",
+        "cstdio": "c",
+        "cstddef": "cpp",
+        "debug-impl.h": "c",
+        "debug.h": "c",
+        "algorithm": "c",
+        "string": "c",
+        "fstream": "c",
+        "istream": "c",
+        "new": "c",
+        "ostream": "c",
+        "sstream": "c",
+        "functional": "c",
+        "typeinfo": "c",
+        "lib.h": "c",
+        "gdb.h": "c",
+        "utils.h": "c"
     }
 }

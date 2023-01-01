@@ -1,0 +1,6 @@
+[submodule "3rdparty/ticables-gdb-bridge"]
+	path = 3rdparty/ticables-gdb-bridge
+	url = https://github.com/empathicqubit/ticables-gdb-bridge
+[submodule "3rdparty/z88dk-gdbstub"]
+	path = 3rdparty/z88dk-gdbstub
+	url = https://github.com/empathicqubit/z88dk-gdbstub

@@ -1,5 +1,7 @@
 #! /bin/bash
-function make_little { 
+set -e
+
+function make_little {
     printf "%04x" "$1" | fold -w2 | tac | tr -d "\n"
 }
 
@@ -11,13 +13,19 @@ function bytesum {
     } | source /dev/stdin
 }
 
-INPUT_FILE="$1"
+if [[ "$1" == "--help" ]] ; then
+    >&2 echo "Syntax: $0 <program file path> [CALCNAME]"
+    exit 0;
+fi
 
-NAME="$(printf "%.8s" "${2:-${INPUT_FILE}}")"
+INPUT_FILE="$1"
+INPUT_FILENAME="$(basename "${INPUT_FILE%.*}")"
+
+NAME="$(printf "%.8s" "${2:-${INPUT_FILENAME}}")"
 NAME="${NAME^^}"
 NAME_HEX="$(printf "%-16s" "$(echo -ne "$NAME" | xxd -ps)" | tr ' ' 0)"
 
-COMMENT="MakePack (c)2022 EmpathicQubit            "
+COMMENT="BashPack (c)2022 EmpathicQubit            "
 COMMENT_HEX=$(echo -ne "$COMMENT" | xxd -ps)
 
 BINSIZE=$(cat "$INPUT_FILE" | wc --bytes)
@@ -55,3 +63,9 @@ $BINSIZE_LITTLE
 $(cat "$INPUT_FILE" | xxd -ps)
 $SUM_LITTLE
 HERE
+
+if [[ "$NAME" =~ ^[0-9] ]] ; then
+    >&2 echo
+    >&2 echo "PROGRAMS BEGINNING WITH A NUMBER ARE COMPLETELY INVISIBLE TO TIOS.
+YOU PROBABLY DON'T WANT THIS UNLESS YOU HAVE A CUSTOM SHELL!!!"
+fi

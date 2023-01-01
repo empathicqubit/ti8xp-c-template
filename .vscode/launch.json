@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "gdb",
+            "request": "attach",
+            "name": "Attach (Run TI Bridge task first!)",
+            "target": "127.0.0.1:${input:port}",
+            "remote": true,
+            "cwd": "${workspaceFolder}",
+            "gdbpath": "/home/empathicqubit/z88dk/bin/z88dk-gdb",
+            "stopAtConnect": true,
+            "debugger_args": [
+                "-x",
+                "${workspaceFolder}/build/program.map"
+            ],
+            "showDevDebugOutput": true,
+        }
+    ],
+    "inputs": [
+        {
+            "id": "port",
+            "description": "Enter the port number",
+            "default": "8998",
+            "type": "promptString",
+        }
+    ]
+}

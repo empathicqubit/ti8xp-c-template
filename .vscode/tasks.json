@@ -1,0 +1,68 @@
+{
+	"version": "2.0.0",
+    "inputs": [
+        {
+            "id": "port",
+            "description": "Enter the port number",
+            "default": "8998",
+            "type": "promptString",
+        }
+    ],
+	"tasks": [
+      {
+          "label": "TI Debug Bridge",
+          "command": "make",
+          "args": ["bridge"],
+          "options": {
+            "env": {
+              "TIBRIDGE_PORT": "${input:port}"
+            }
+          },
+
+          "type": "shell",
+
+          "presentation": {
+              "echo": true,
+              "reveal": "always",
+              "focus": false,
+              "panel": "dedicated"
+          },
+
+          "problemMatcher": [
+              {
+                "pattern": [
+                  {
+                    "regexp": ".",
+                    "file": 1,
+                    "location": 2,
+                    "message": 3
+                  }
+                ],
+                "background": {
+                  "activeOnStart": true,
+                  "beginsPattern": ".",
+                  "endsPattern": ".",
+                }
+              }
+          ],
+      },
+        {
+            "type": "shell",
+            "label": "Start program on calculator",
+
+            "command": "make",
+            "args": ["start"]
+        },
+        {
+            "type": "shell",
+            "label": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+
+            "command": "make",
+            "args": [],
+        }
+	]
+}

@@ -6,7 +6,15 @@
             "intelliSenseMode": "linux-gcc-x64",
             "compilerPath": "/snap/bin/z88dk.zcc",
             "cStandard": "gnu17",
-            "cppStandard": "gnu++14"
+            "cppStandard": "gnu++14",
+            "defines": [
+                "GDB_ENABLED",
+                "__LIB__=",
+                "__naked=",
+                "__asm=",
+                "__endasm=",
+                "__z88dk_fastcall=",
+            ]
         }
     ],
     "version": 4

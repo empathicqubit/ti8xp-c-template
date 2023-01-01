@@ -1,0 +1,11 @@
+version: '3'
+services:
+    builder:
+        build:
+            dockerfile: ./Dockerfile
+            context: .
+        volumes:
+            - ..:/app
+        devices:
+            - "/dev/bus/usb/002/022:/dev/bus/usb/002/022:rw"
+        user: root

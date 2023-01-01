@@ -1,0 +1,71 @@
+## Config file for TiLP
+## Copyright (C) 1999-2011 The TiLP Team <tilp-devel@lists.sf.net>
+## Warning: any comments that you add to this file WILL be overwritten
+
+[DEVICE]
+#Calculator model
+calc_model=none
+#Cable model
+cable_model=DirectLink
+#Port
+cable_port=#1
+#Timeout in tenth of seconds
+cable_timeout=15
+#Inter-bit delay in us
+cable_delay=10
+
+[GUI]
+#Size of remote view
+pane_x_size=320
+#Size of remote view
+pane_y_size=240
+#Size of window (full)
+wnd_x_size1=640
+#Size of window (full)
+wnd_y_size1=480
+#Size of window (no local)
+wnd_x_size2=320
+#Size of window (no local)
+wnd_y_size2=320
+#Sorting mode for local view
+local_sort=1
+#Sorting order for local view
+local_sort_order=1
+#Sorting mode for remote view
+remote_sort=1
+#Sorting order for remote view
+remote_sort_order=1
+#Obsolete, ignored by current TiLP
+fs_type=2
+#File Selector type
+filesel_type=2
+#Use full gui (TiLP-I) or just remote view
+full_gui=1
+
+[OPTIONS]
+#Auto-detect USB handheld model
+auto_detect=1
+#Show hidden files in local view
+show_all=0
+#Ask for overwriting
+overwrite=1
+#Receive as group instead of single files
+recv_as_group=1
+#Receive as TIGroup instead of backup/group files
+backup_as_tigroup=1
+
+[FONTS]
+#Font to use for remote view
+remote_font_name=
+#Font to use for local view
+local_font_name=-adobe-courier-medium-r-*-*-*-120-*-*-*-*-*-*
+
+[SCREEN]
+#Screen format
+screen_format=5
+#Screen scaling
+screen_scaling=0
+#Screen clipping
+screen_clipping=1
+#Save as blurry image
+screen_blurry=0
