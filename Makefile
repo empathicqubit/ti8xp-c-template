@@ -1,4 +1,5 @@
 # make -p ist ein Freund
+SHELL := bash.exe
 
 PROGNAME?=CRACKERS
 PLATFORM?=ti8x
@@ -13,7 +14,6 @@ GDB=1
 
 CC=$(shell which zcc z88dk.zcc | head -1)
 LD=$(CC)
-SHELL=bash
 
 BASE_CFLAGS=-Wall
 BASE_CFLAGS_DEBUG=$(BASE_CFLAGS) -debug -g -O0

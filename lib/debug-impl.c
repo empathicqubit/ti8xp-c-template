@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "../../z88dk-gdbstub/src/gdb.h"
+#include "../3rdparty/z88dk-gdbstub/src/gdb.h"
 #include "debug-impl.h"
 
 //#define DBG_SIMULATED
