@@ -45,6 +45,11 @@ VERSION_BYTE=$(make_hex $VERSION)
 ARCHIVE_BYTE=$(make_hex $ARCHIVE)
 
 INPUT_FILE="$1"
+if [[ ! -e "$INPUT_FILE" ]] ; then
+    >&2 echo "File doesn't exist: $INPUT_FILE"
+    exit 1
+fi
+
 INPUT_FILENAME="$(basename "${INPUT_FILE%.*}")"
 
 NAME="$(printf "%.8s" "${2:-${INPUT_FILENAME}}")"
