@@ -12,7 +12,7 @@ function make_hex {
 function bytesum {
     {
         echo 'echo $(('
-        xxd -i | tr , +
+        xxd -i | tr ',' '+'
         echo '))'
     } | source /dev/stdin
 }
@@ -21,12 +21,14 @@ if [[ "$1" == "--help" ]] ; then
     >&2 echo "Syntax: $0 <program file path> [--variable] [--archive] [CALCNAME]"
     >&2 echo "    --variable: Save as an appvar instead of a program"
     >&2 echo "    --archive: Save as an *archive file"
+    >&2 echo "    --hex: Output hex instead of binary"
     exit 0
 fi
 
 TYPE=6
 VERSION=0
 ARCHIVE=0
+OUTPUT_HEX=0
 
 while [[ "$1" =~ -- ]] ; do
     if [[ "$1" == "--variable" ]] ; then
@@ -36,6 +38,10 @@ while [[ "$1" =~ -- ]] ; do
     if [[ "$1" == "--archive" ]] ; then
         >&2 echo "ARCHIVING"
         ARCHIVE=128
+    fi
+    if [[ "$1" == "--hex" ]] ; then
+        >&2 echo "OUTPUT HEX"
+        OUTPUT_HEX=1
     fi
     shift
 done
@@ -52,6 +58,9 @@ fi
 
 INPUT_FILENAME="$(basename "${INPUT_FILE%.*}")"
 
+BINSIZE=$(cat "$INPUT_FILE" | wc --bytes)
+BINSIZE_LITTLE=$(make_little $BINSIZE)
+
 NAME="$(printf "%.8s" "${2:-${INPUT_FILENAME}}")"
 NAME="${NAME^^}"
 NAME_HEX="$(printf "%-16s" "$(echo -ne "$NAME" | xxd -ps)" | tr ' ' 0)"
@@ -59,20 +68,16 @@ NAME_HEX="$(printf "%-16s" "$(echo -ne "$NAME" | xxd -ps)" | tr ' ' 0)"
 COMMENT="BashPack (c)2022 EmpathicQubit            "
 COMMENT_HEX=$(echo -ne "$COMMENT" | xxd -ps)
 
-BINSIZE=$(cat "$INPUT_FILE" | wc --bytes)
-BINSIZE_LITTLE=$(make_little $BINSIZE)
-
-if ((TYPE == 23)) ; then
-    VARDATA="$(cat "$INPUT_FILE" | xxd -ps)"
-    VARSIZE=$((BINSIZE))
-else
-    VARDATA="$BINSIZE_LITTLE $(cat "$INPUT_FILE" | xxd -ps)"
-    VARSIZE=$((BINSIZE+2))
-fi
+VARDATA="$BINSIZE_LITTLE $(cat "$INPUT_FILE" | xxd -ps)"
+VARSIZE=$((BINSIZE+2))
 
 VARSIZE_LITTLE=$(make_little $VARSIZE)
 
 VARRECORD_SIZE=$((VARSIZE+17))
+if ((VARRECORD_SIZE > 0xffff)) ; then
+    >&2 echo "Variable record is $((VARRECORD_SIZE - 0xffff)) greater than $((0xffff)) bytes: $VARRECORD_SIZE"
+fi
+
 VARRECORD_SIZE_LITTLE=$(make_little $VARRECORD_SIZE)
 
 FILE_SUM=$({ echo -ne "$BINSIZE_LITTLE" | xxd -r -ps ; cat "$INPUT_FILE" ; } | bytesum)
@@ -93,19 +98,30 @@ SUM_LITTLE=$(make_little $SUM)
 
 FILE_HEADER="$(echo -ne "**TI83F*" | xxd -ps)"
 
-cat <<HERE | xxd -r -ps
+function output_pipe {
+    xxd -r -ps
+}
+
+if ((OUTPUT_HEX)) ; then
+    function output_pipe {
+        cat
+    }
+fi
+
+cat <<HERE | output_pipe
 $FILE_HEADER
 1A 0A 00
 $COMMENT_HEX
 $VARRECORD_SIZE_LITTLE
+    $VARHEADER_SIZE_LITTLE
+        $VARSIZE_LITTLE
+        $TYPE_BYTE
+        $NAME_HEX
+        $VERSION_BYTE
+        $ARCHIVE_BYTE
+        $VARSIZE_LITTLE
+    $VARDATA
 
-$VARHEADER_SIZE_LITTLE
-$VARSIZE_LITTLE
-$TYPE_BYTE
-$NAME_HEX
-$VERSION_BYTE $ARCHIVE_BYTE
-$VARSIZE_LITTLE
-$VARDATA
 $SUM_LITTLE
 HERE
 
