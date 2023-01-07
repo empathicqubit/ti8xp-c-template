@@ -46,10 +46,6 @@ while [[ "$1" =~ -- ]] ; do
     shift
 done
 
-TYPE_BYTE=$(make_hex $TYPE)
-VERSION_BYTE=$(make_hex $VERSION)
-ARCHIVE_BYTE=$(make_hex $ARCHIVE)
-
 INPUT_FILE="$1"
 if [[ ! -e "$INPUT_FILE" ]] ; then
     >&2 echo "File doesn't exist: $INPUT_FILE"
@@ -82,7 +78,7 @@ fi
 
 VARRECORD_SIZE_LITTLE=$(make_little $VARRECORD_SIZE)
 
-FILE_SUM=$({ echo -ne "$BINSIZE_LITTLE" | xxd -r -ps ; echo -ne "$BINDATA" ; } | bytesum)
+VARDATA_SUM=$(echo -ne "$VARDATA" | bytesum)
 NAME_SUM=$(echo -ne "$NAME" | bytesum)
 
 VARHEADER_SIZE=13
@@ -93,9 +89,16 @@ VARHEADER_SIZE_HI=$((VARHEADER_SIZE >> 8))
 VARSIZE_LO=$((VARSIZE & 0xff))
 VARSIZE_HI=$((VARSIZE >> 8))
 
+# For lack of a better value
+VERSION=$((VARDATA_SUM % 256))
+
+TYPE_BYTE=$(make_hex $TYPE)
+VERSION_BYTE=$(make_hex $VERSION)
+ARCHIVE_BYTE=$(make_hex $ARCHIVE)
+
 HEADER_SUM=$((2*VARSIZE_LO + 2*VARSIZE_HI + TYPE + VERSION + ARCHIVE + VARHEADER_SIZE_LO + VARHEADER_SIZE_HI))
 
-SUM=$(((HEADER_SUM + NAME_SUM + FILE_SUM) % 65536))
+SUM=$(((HEADER_SUM + NAME_SUM + VARDATA_SUM) % 65536))
 SUM_LITTLE=$(make_little $SUM)
 
 FILE_HEADER="$(echo -ne "**TI83F*" | xxd -ps)"
