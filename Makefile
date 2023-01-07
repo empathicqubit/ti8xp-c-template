@@ -78,14 +78,18 @@ vbshared: /vbshared/_.8xp
 clean:
 	rm -rf build
 
-$(BUILD)/program.8xp: $(BUILD)/program.bin
-	bash ./bashpac8x.sh "$<" "$(PROGNAME)" > "$@"
+define 8xp_build
+$$(BUILD)/$(1).8xp: $$(BUILD)/$(1).bin
+	bash ./bashpac8x.sh "$$<" "$(2)" > "$$@"
 
-$(BUILD)/program.bin: $(BUILD)/program.bip
-	cat header_bytes.bin "$<" > "$@"
+$$(BUILD)/$(1).bin: $$(BUILD)/$(1).bip
+	cat header_bytes.bin "$$<" > "$$@"
 
-$(BUILD)/program.bip: $(SRC_OBJECT_FILES) $(LIB_OBJECT_FILES)
-	$(LD) +ti8x -subtype=$(SUBTYPE) $(LDFLAGS) -o "$@" $(filter %.o,$^)
+$$(BUILD)/$(1).bip: $(3)
+	$$(LD) +ti8x -subtype=$$(SUBTYPE) $$(LDFLAGS) -o "$$@" $$(filter %.o,$$^)
+endef
+
+$(eval $(call 8xp_build,program,$(PROGNAME),$(SRC_OBJECT_FILES) $(LIB_OBJECT_FILES)))
 
 # It's extremely important that the source file paths are absolute, otherwise the
 # extension will have trouble mapping the paths.
