@@ -58,7 +58,9 @@ fi
 
 INPUT_FILENAME="$(basename "${INPUT_FILE%.*}")"
 
-BINSIZE=$(cat "$INPUT_FILE" | wc --bytes)
+BINDATA="$(cat "$INPUT_FILE" | xxd -ps | tr -d '\n')"
+
+BINSIZE=$(($(echo -ne "$BINDATA" | wc --bytes) / 2))
 BINSIZE_LITTLE=$(make_little $BINSIZE)
 
 NAME="$(printf "%.8s" "${2:-${INPUT_FILENAME}}")"
@@ -68,7 +70,7 @@ NAME_HEX="$(printf "%-16s" "$(echo -ne "$NAME" | xxd -ps)" | tr ' ' 0)"
 COMMENT="github.com/empathicqubit/ti8xp-c-template "
 COMMENT_HEX=$(echo -ne "$COMMENT" | xxd -ps)
 
-VARDATA="$BINSIZE_LITTLE $(cat "$INPUT_FILE" | xxd -ps)"
+VARDATA="$BINSIZE_LITTLE $BINDATA"
 VARSIZE=$((BINSIZE+2))
 
 VARSIZE_LITTLE=$(make_little $VARSIZE)
@@ -80,7 +82,7 @@ fi
 
 VARRECORD_SIZE_LITTLE=$(make_little $VARRECORD_SIZE)
 
-FILE_SUM=$({ echo -ne "$BINSIZE_LITTLE" | xxd -r -ps ; cat "$INPUT_FILE" ; } | bytesum)
+FILE_SUM=$({ echo -ne "$BINSIZE_LITTLE" | xxd -r -ps ; echo -ne "$BINDATA" ; } | bytesum)
 NAME_SUM=$(echo -ne "$NAME" | bytesum)
 
 VARHEADER_SIZE=13

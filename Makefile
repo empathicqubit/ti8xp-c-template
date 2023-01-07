@@ -1,5 +1,5 @@
 # make -p ist ein Freund
-SHELL := bash.exe
+SHELL := bash
 
 PROGNAME?=CRACKERS
 PLATFORM?=ti8x
