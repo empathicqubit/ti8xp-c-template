@@ -1,4 +1,4 @@
-# z88dk-ti8xp-template
+# ti8xp-c-template
 
 A debuggable project for TI8x calculators, such as TI 83/84 Plus and maybe others.
 It lets you debug directly on the calculator via a USB or serial cable.

@@ -65,7 +65,7 @@ NAME="$(printf "%.8s" "${2:-${INPUT_FILENAME}}")"
 NAME="${NAME^^}"
 NAME_HEX="$(printf "%-16s" "$(echo -ne "$NAME" | xxd -ps)" | tr ' ' 0)"
 
-COMMENT="BashPack (c)2022 EmpathicQubit            "
+COMMENT="github.com/empathicqubit/ti8xp-c-template "
 COMMENT_HEX=$(echo -ne "$COMMENT" | xxd -ps)
 
 VARDATA="$BINSIZE_LITTLE $(cat "$INPUT_FILE" | xxd -ps)"
