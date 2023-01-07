@@ -4,6 +4,7 @@ A debuggable project for TI8x calculators, such as TI 83/84 Plus and maybe other
 It lets you debug directly on the calculator via a USB or serial cable.
 It is currently quite slow, and the lines are offset a bit wrong.
 
+
 ## Building
 If you have all the dependencies, then all you need to do is run these commands:
 
@@ -38,3 +39,7 @@ In order to build ticables-gdb-bridge successfully, you will need
 * readline
 
 and their dev packages.
+
+## Credits
+
+This project is based on the [TI C project template](https://github.com/empathicqubit/ti8xp-c-template)
