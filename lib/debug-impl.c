@@ -161,5 +161,6 @@ void debug_init (void) {
 }
 #else /* GDB_ENABLED */
 void debug_init (void) {}
-void debug_swbreak(void) {}
+void gdb_swbreak(void) {}
+void gdb_print(const char *str) {}
 #endif /* GDB_ENABLED */
