@@ -89,9 +89,6 @@ VARHEADER_SIZE_HI=$((VARHEADER_SIZE >> 8))
 VARSIZE_LO=$((VARSIZE & 0xff))
 VARSIZE_HI=$((VARSIZE >> 8))
 
-# For lack of a better value
-VERSION=$((VARDATA_SUM % 256))
-
 TYPE_BYTE=$(make_hex $TYPE)
 VERSION_BYTE=$(make_hex $VERSION)
 ARCHIVE_BYTE=$(make_hex $ARCHIVE)

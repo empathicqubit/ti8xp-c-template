@@ -39,6 +39,8 @@ BUILD=build
 BRIDGE_PATH=3rdparty/ticables-gdb-bridge
 GDB_PATH=3rdparty/z88dk-gdbstub
 TIKEYS=$(BRIDGE_PATH)/build/tikeys
+TILP=tilp -n --calc=83p
+TILPCFG=$(HOME)/.tilp
 
 wilder_card=$(wildcard $(1)/**/$(2)) $(wildcard $(1)/$(2))
 define source_directory
@@ -56,12 +58,12 @@ $(call source_directory,LIB,lib)
 
 all: $(BUILD)/program.8xp
 
-install: $(BUILD)/program.8xp ${HOME}/.tilp
-	sed -i 's/auto_detect[[:space:]]*=[[:space:]]*1/auto_detect=0/g' "${HOME}/.tilp"
+install: $(BUILD)/program.8xp $(TILPCFG)
+	sed -i 's/auto_detect[[:space:]]*=[[:space:]]*1/auto_detect=0/g' "$(TILPCFG)"
 	$(TIKEYS) --reset-ram
-	tilp -n --calc=83p "$<"
+	$(TILP) "$<"
 
-${HOME}/.tilp: ./.tilp
+$(TILPCFG): ./.tilp
 	if [[ ! -e "$@" ]] ; then
 		cp "$<" "$@"
 	fi
